@@ -24,5 +24,4 @@ replace' (x:xs) index r counter = if counter == index then
                                     x:replace' xs index r (counter+1)
 
 letters :: String -> String
-letters [] = []
-letters (x:xs) = if elem x (['a'..'z']++['A'..'Z']) then x:letters xs else letters xs
+letters list = [x | x <- list, elem x (['a'..'z']++['A'..'Z'])]

@@ -15,7 +15,7 @@ data Plant = Clover
 data Garden = Garden ([String], [String])
 
 garden :: [String] -> String -> Garden
-garden students plants = Garden $ (students, lines plants)
+garden students plants = Garden (students, lines plants)
 
 lookupPlants :: String -> Garden -> [Plant]
 lookupPlants student (Garden (students, plants)) = concat $ map (\x -> map flower [x !! (si * 2), x !! (si * 2 + 1)]) plants

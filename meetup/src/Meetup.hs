@@ -18,7 +18,7 @@ data Schedule = First
               | Teenth
 
 meetupDay :: Schedule -> Weekday -> Integer -> Int -> Day
-meetupDay schedule weekday year month = head $ filter (wmodifier schedule weekday year month) [h x | x <- [1..31]]
+meetupDay schedule weekday year month = head $ filter (wmodifier schedule weekday year month) [h x | x <- [1..gregorianMonthLength year month]]
   where h = fromGregorian year month
 
 wconvert :: Weekday -> String

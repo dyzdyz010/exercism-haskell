@@ -18,8 +18,11 @@ data Schedule = First
               | Teenth
 
 meetupDay :: Schedule -> Weekday -> Integer -> Int -> Day
-meetupDay schedule weekday year month = head $ filter (wmodifier schedule weekday year month) [h x | x <- [1..gregorianMonthLength year month]]
+meetupDay schedule weekday year month = wmodifier schedule weekday year month
+  $ filter (\d -> (wd d) == wconvert weekday)
+  [h x | x <- [1..gregorianMonthLength year month]]
   where h = fromGregorian year month
+        wd d = formatTime defaultTimeLocale "%a" d
 
 wconvert :: Weekday -> String
 wconvert str = case str of
@@ -31,19 +34,13 @@ wconvert str = case str of
   Saturday -> "Sat"
   Sunday -> "Sun"
 
-wmodifier :: Schedule -> Weekday -> Integer -> Int -> (Day -> Bool)
-wmodifier sch weekday year month = (\d -> weq d &&  dayd d `elem`
-                                        (case sch of
-                                          First -> [1..7]
-                                          Second -> [8..14]
-                                          Third -> [15..21]
-                                          Fourth -> [22..28]
-                                          Last -> [mlen-6 .. mlen]
-                                          Teenth -> [13..19]
-                                        )
-                                   )
-  where wd d = formatTime defaultTimeLocale "%a" d
-        weq d = (wd d == wconvert weekday)
-        dayd d = read (formatTime defaultTimeLocale "%d" d)::Int
-        mon d = formatTime defaultTimeLocale "%m" d
-        mlen = gregorianMonthLength year month
+wmodifier :: Schedule -> Weekday -> Integer -> Int -> [Day] -> Day
+wmodifier sch weekday year month days =
+  case sch of
+    First -> days !! 0
+    Second -> days !! 1
+    Third -> days !! 2
+    Fourth -> days !! 3
+    Last -> last days
+    Teenth -> filter (\d -> dayd d `elem` [13..19]) days !! 0
+  where dayd d = read (formatTime defaultTimeLocale "%d" d)::Int

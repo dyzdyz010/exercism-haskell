@@ -12,7 +12,7 @@ data Allergen = Eggs
 
 allergindex :: Int -> ([Allergen] -> [Allergen])
 allergindex n | n > 7 = id
-allergindex n = (iterate succ Eggs !! n :)
+allergindex n = ([Eggs ..] !! n :)
 
 allergies :: Int -> [Allergen]
 allergies 0 = []

@@ -10,9 +10,9 @@ largestProduct size digits
   | not $ null $ nonDigits = Left $ InvalidDigit $ head nonDigits
   where nonDigits = filter (not . isDigit) digits
 largestProduct 0 _ = Right 1
-largestProduct size digits = Right $ toInteger $ maximum $ map product $ candidates size digits
+largestProduct size digits = Right $ toInteger $ maximum $ candidates size digits
 
-candidates :: Int -> String -> [[Int]]
+candidates :: Int -> String -> [Int]
 candidates size digits
-  | size == length digits = [map digitToInt digits]
-  | otherwise = (map digitToInt $ take size digits): candidates size (drop 1 digits)
+  | size == length digits = [product $ map digitToInt digits]
+  | otherwise = (product $ map digitToInt $ take size digits): candidates size (drop 1 digits)

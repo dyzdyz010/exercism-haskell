@@ -12,7 +12,7 @@ module Matrix
     , transpose
     ) where
 
-import Data.Vector (Vector)
+import           Data.Vector (Vector)
 import qualified Data.Vector as V (fromList, toList)
 
 data Matrix a = Matrix [[a]] deriving (Eq, Show)

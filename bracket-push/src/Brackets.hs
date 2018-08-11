@@ -6,24 +6,14 @@ arePaired xs = arePaired' xs []
 arePaired' :: String -> String -> Bool
 arePaired' [] [] = True
 arePaired' [] _ = False
-arePaired' (x: xs) zs
-  | isLeft x = arePaired' xs (x: zs)
-arePaired' (x: xs) (z: zs)
-  | half x == Just z  = arePaired' xs zs
-  | half x == Nothing  = arePaired' xs (z: zs)
-  | otherwise = False
-arePaired' (x: xs) zs
-  | half x /= Nothing && null zs = False
-  | otherwise = arePaired' xs zs
-
-isLeft :: Char -> Bool
-isLeft '(' = True
-isLeft '[' = True
-isLeft '{' = True
-isLeft _ = False
-
-half :: Char -> Maybe Char
-half ')' = Just '('
-half ']' = Just '['
-half '}' = Just '{'
-half _ = Nothing
+arePaired' (x: xs) ss =
+  if x `elem` lb then arePaired' xs (x:ss)
+  else if x `elem` rb then
+    if ss /= [] && (half $ head ss) == x then arePaired' xs (drop 1 ss) else False
+  else arePaired' xs ss
+  where lb = "([{"
+        rb = ")]}"
+        half h = case h of
+          '(' -> ')'
+          '[' -> ']'
+          '{' -> '}'
